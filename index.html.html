@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vanity – Makeup Tutorials</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5ECE4;--card:#FBF6F1;--ink:#3F2A26;--mute:#7E645B;--ac:#A94F4B;--acx:#fff;--line:#E4D3C7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#241A18;--card:#2F2321;--ink:#F3E4DA;--mute:#C2A99D;--ac:#E39A93;--acx:#2a1512;--line:#463632}}
+:root[data-theme="dark"]{--bg:#241A18;--card:#2F2321;--ink:#F3E4DA;--mute:#C2A99D;--ac:#E39A93;--acx:#2a1512;--line:#463632}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'DM Sans',system-ui,sans-serif}
+main{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:8px}
+h1{font:700 clamp(3rem,13vw,5.5rem)/.9 'Bodoni Moda',Georgia,serif;margin:0;letter-spacing:-.02em}
+h2,h3{font-family:'Bodoni Moda',Georgia,serif;margin:.2em 0}
+h3{font-size:1.1rem}
+.tag{margin:6px 0 18px;color:var(--mute);max-width:46ch}
+nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+button,select,input{font:inherit;color:inherit}
+button{background:var(--ac);color:var(--acx);border:0;border-radius:10px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+button.ghost{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+button.sm{padding:2px 10px;font-size:.85rem}
+button.link{background:none;color:var(--ac);padding:4px 0;text-decoration:underline}
+nav button,.pills button{background:transparent;color:var(--mute);border:1px solid var(--line)}
+nav button.on,.pills button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+input[type=search],input[type=text],input[type=date],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+select{width:auto}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.top{display:flex;align-items:center;gap:12px}.grow{flex:1}
+small,.mu{color:var(--mute)}
+ol{padding-left:22px;margin:8px 0 0}li{margin:8px 0;display:flex;justify-content:space-between;gap:10px}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}
+input[type=color]{width:56px;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:2px}
+.chip{display:inline-block;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);flex:none}
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.shade{display:flex;flex-direction:column;align-items:center;text-align:center;width:104px;gap:2px}
+.grp{margin-top:18px}
+.cam{margin:12px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.vw{position:relative;width:100%;max-width:360px}
+.vw video{width:100%;border-radius:12px;display:block}
+.vw:after{content:"";position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px;border:2px solid #fff;box-shadow:0 0 0 1px #000;border-radius:6px}
+.err{color:var(--ac);width:100%;margin:0}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+.seasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.seasons .card{margin:0}.seasons .hit{border:2px solid var(--ac)}
+.pal{display:flex;gap:4px;margin-top:6px}.pal i{width:26px;height:26px;border-radius:50%;display:block}
+button:disabled{opacity:.4;cursor:default}.big{font:500 1.3rem/1.4 'Bodoni Moda',Georgia,serif;margin:6px 0}.coach{border-color:var(--ac);margin-top:8px}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .3s}}
+</style></head>
+<body><main id="root"></main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const {useState,useEffect,useRef}=React,h=React.createElement;
+const ls={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function say(t){try{const s=speechSynthesis;s.cancel();const u=new SpeechSynthesisUtterance(t);const v=s.getVoices().find(v=>/female|zira|samantha|susan|aria|hazel/i.test(v.name));if(v)u.voice=v;u.rate=.95;s.speak(u)}catch(e){}}
+const rgb=x=>[1,3,5].map(i=>parseInt(x.slice(i,i+2),16));
+const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+const hex=c=>'#'+c.map(v=>Math.round(v).toString(16).padStart(2,'0')).join('');
+const SH={
+Lipstick:[['Nude Rose','#C48B80'],['Brick Red','#A23B35'],['Berry','#8E2F4F'],['Coral','#E4735F'],['Mauve','#A46A78'],['Classic Red','#C1272D']],
+Eyeshadow:[['Champagne','#E3C9A6'],['Bronze','#A9743F'],['Taupe','#8B7265'],['Plum','#6D3F5B'],['Copper','#B8663A'],['Olive','#6F7041']],
+Foundation:[['Fair','#F1D5C0'],['Light','#E6BE9F'],['Medium','#CF9A74'],['Tan','#B57C57'],['Deep','#8A5A3C'],['Rich','#5F3B28']]};
+const T=[
+{id:1,n:'Flawless base',cat:'Base & Skin',k:'face',c:'#E6BE9F',s:['Cleanse and moisturize, then wait a minute for it to absorb.','Dot primer on the T-zone and blend outward.','Press foundation in with a damp sponge, starting at the center of the face.','Conceal under the eyes and set with a light dusting of powder.']},
+{id:2,n:'Glowing skin prep',cat:'Base & Skin',k:'face',c:'#F1D5C0',s:['Use a hydrating serum on damp skin.','Tap a cream highlighter on the cheekbones.','Mist your face to melt the layers together.']},
+{id:3,n:'Everyday eyeshadow',cat:'Eyes',k:'eye',c:'#E3C9A6',s:['Sweep a matte neutral all over the lid as a base.','Blend a slightly darker shade into the crease.','Add a shimmer on the center of the lid.','Finish with mascara on the top lashes.']},
+{id:4,n:'Winged liner',cat:'Eyes',k:'eye',c:'#5F3B28',s:['Draw a small line from the outer corner toward the end of your brow.','Connect the wing back to the lash line.','Fill in the gap and tidy the edge with a cotton swab.']},
+{id:5,n:'Smoky eyes',cat:'Eyes',k:'eye',c:'#6D3F5B',s:['Apply a dark shade along the upper lash line.','Smudge it upward and outward with a fluffy brush.','Blend a lighter shade over the edge so it fades softly.','Line the lower lash line and smudge.']},
+{id:6,n:'Perfect nude lips',cat:'Lips',k:'lip',c:'#C48B80',s:['Exfoliate and balm your lips.','Outline with a pencil one shade deeper than your lip color.','Fill in with lipstick and blot once.']},
+{id:7,n:'Bold red lips',cat:'Lips',k:'lip',c:'#C1272D',s:['Prep with a thin layer of balm and wipe off the extra.','Line the cupid’s bow first, then the corners.','Apply the lipstick, blot, then apply a second coat.']},
+{id:8,n:'Festive glam',cat:'Occasion Looks',k:'eye',c:'#B8663A',s:['Build a full-coverage base and set it well.','Pack copper shimmer on the lids and add winged liner.','Add a warm blush and highlight.','Finish with a berry or brick lip.']},
+{id:9,n:'Fresh college-ready',cat:'Occasion Looks',k:'face',c:'#E6BE9F',s:['Use a tinted moisturizer and conceal only where needed.','Brush brows into place.','Add a cream blush and mascara.','Finish with a tinted lip balm.']},
+{id:10,n:'Bold party night',cat:'Occasion Looks',k:'lip',c:'#8E2F4F',s:['Contour and highlight over a matte base.','Use a bold glitter or smoky eye.','Add false lashes if you like.','Finish with a deep berry lip.']}];
+function Pv({c,k}){return h('svg',{viewBox:'0 0 120 70',width:88,height:52,'aria-hidden':true},
+k==='lip'?[h('path',{key:1,d:'M10 34Q35 8 60 24Q85 8 110 34Q60 40 10 34Z',fill:c}),h('path',{key:2,d:'M10 34Q60 40 110 34Q85 66 60 62Q35 66 10 34Z',fill:c,opacity:.8})]
+:k==='eye'?[h('path',{key:1,d:'M8 42Q60 -8 112 42Q60 62 8 42Z',fill:c}),h('circle',{key:2,cx:60,cy:40,r:10,fill:'#3F2A26'})]
+:h('circle',{cx:60,cy:35,r:30,fill:c}))}
+function Cam({on}){const v=useRef(),c=useRef(),gain=useRef([1,1,1]),[w,setW]=useState(''),[s,setS]=useState(null),[err,setE]=useState('');
+async function start(){try{const m=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}});v.current.srcObject=m;await v.current.play();setS(m);setE('')}catch(e){setE('Camera is not available here. Open this page directly in a browser and allow camera access.')}}
+function stop(){s&&s.getTracks().forEach(t=>t.stop());setS(null)}
+function avg(){const e=v.current,cv=c.current,x=cv.getContext('2d');cv.width=e.videoWidth;cv.height=e.videoHeight;x.drawImage(e,0,0);const d=x.getImageData(cv.width/2-10,cv.height/2-10,20,20).data;let r=0,g=0,b=0;const n=d.length/4;for(let i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2]}return [r/n,g/n,b/n]}
+function cal(){const a=avg();if(a[0]+a[1]+a[2]<150){setW('Too dark to calibrate. Move to daylight.');return}gain.current=a.map(x=>255/Math.max(x,1));setW('White balance set. Now sample your skin or product.')}
+function grab(){const a=avg(),L=.299*a[0]+.587*a[1]+.114*a[2],g=gain.current;setW(L<50?'Too dark. Move to daylight.':L>240?'Too bright. Step out of direct light.':g[0]===1&&g[1]===1&&g[2]===1?'Tip: calibrate on white paper first for a more accurate color.':'');on(hex(a.map((x,i)=>Math.min(255,x*g[i]))))}
+useEffect(()=>()=>{s&&s.getTracks().forEach(t=>t.stop())},[s]);
+return h('div',{className:'cam'},
+h('div',{className:'vw',style:{display:s?'block':'none'}},h('video',{ref:v,playsInline:true,muted:true})),
+h('canvas',{ref:c,hidden:true}),
+err&&h('p',{className:'err',role:'alert'},err),
+w&&h('p',{className:'mu',role:'status',style:{width:'100%',margin:0}},w),
+s?[h('button',{key:1,onClick:grab},'Sample center color'),h('button',{key:3,className:'ghost',onClick:cal},'Calibrate on white paper'),h('button',{key:2,className:'ghost',onClick:stop},'Stop camera')]:h('button',{onClick:start},'Start camera'))}
+function Tut({fav,tf,done,td}){const [q,setQ]=useState(''),[cat,setCat]=useState('All'),[open,setOpen]=useState(null),[coach,setCoach]=useState(null);
+const cats=['All','Base & Skin','Eyes','Lips','Occasion Looks'];
+const list=T.filter(t=>(cat==='All'||t.cat===cat)&&(t.n+' '+t.cat+' '+t.s.join(' ')).toLowerCase().includes(q.toLowerCase()));
+return h('section',null,
+h('input',{type:'search',placeholder:'Search tutorials',value:q,onChange:e=>setQ(e.target.value),'aria-label':'Search tutorials'}),
+h('div',{className:'pills'},cats.map(x=>h('button',{key:x,className:x===cat?'on':'',onClick:()=>setCat(x)},x))),
+list.length?list.map(t=>{const dn=done[t.id]||[],sv=fav.includes(t.id);return h('article',{key:t.id,className:'card'},
+h('div',{className:'top'},h(Pv,{c:t.c,k:t.k}),h('div',{className:'grow'},h('h3',null,t.n),h('small',null,t.cat+', '+dn.length+' of '+t.s.length+' steps done')),
+h('button',{className:'ghost',onClick:()=>tf(t.id),'aria-pressed':sv},sv?'Saved':'Save')),
+h('button',{className:'link',onClick:()=>setOpen(open===t.id?null:t.id)},open===t.id?'Hide steps':'Show steps'),coach!==t.id&&h('button',{className:'link',style:{marginLeft:14},onClick:()=>setCoach(t.id)},'Hands-free mode'),coach===t.id&&h(Coach,{t,close:()=>setCoach(null)}),
+open===t.id&&h('ol',null,t.s.map((s,i)=>h('li',{key:i},h('label',null,h('input',{type:'checkbox',checked:dn.includes(i),onChange:()=>td(t.id,i)}),' '+s),h('button',{className:'ghost sm',onClick:()=>say(s)},'Listen')))))})
+:h('p',{className:'mu'},'No tutorials match. Try another word or category.'))}
+function Match(){const [c,setC]=useState('#c48b80');const t=rgb(c);
+return h('section',null,h('h2',null,'Color match'),
+h('p',{className:'mu'},'Pick a color or sample one with your camera. Shades are ranked by RGB distance.'),
+h('div',{className:'row'},h('input',{type:'color',value:c,onChange:e=>setC(e.target.value),'aria-label':'Pick a color'}),h('span',{className:'chip',style:{background:c}}),h('code',null,c)),
+h(Cam,{on:setC}),h(SaveBox,{c}),
+Object.entries(SH).map(([k,l])=>h('div',{key:k,className:'grp'},h('h3',null,k),
+h('div',{className:'sw'},l.map(s=>[s[0],s[1],dist(rgb(s[1]),t)]).sort((a,b)=>a[2]-b[2]).slice(0,3).map((s,i)=>
+h('div',{key:s[0],className:'shade'},h('span',{className:'chip',style:{background:s[1]}}),h('b',null,s[0]),h('small',null,i?'Close match':'Best match')))))))}
+function Skin(){const [c,setC]=useState('#d9a88a');const [r,g,bl]=rgb(c);
+const L=.299*r+.587*g+.114*bl,depth=L>200?'Fair':L>165?'Light':L>125?'Medium':L>90?'Tan':'Deep';
+const q=bl/r,u=q<.6?'Warm':q>.74?'Cool':'Neutral';
+const dress={Warm:['olive','mustard','terracotta','emerald'],Cool:['royal blue','fuchsia','lavender','ruby'],Neutral:['teal','dusty rose','coral','navy']}[u];
+const f=SH.Foundation.map(s=>[s,dist(rgb(s[1]),[r,g,bl])]).sort((a,b)=>a[1]-b[1])[0][0];
+return h('section',null,h('h2',null,'Skin tone checker'),
+h('p',{className:'mu'},'Point the camera at bare skin in good daylight, then sample. Results are estimates, so compare with a swatch in person.'),
+h('div',{className:'row'},h('input',{type:'color',value:c,onChange:e=>setC(e.target.value),'aria-label':'Pick your skin color'}),h('span',{className:'chip',style:{background:c}}),h('code',null,c)),
+h(Cam,{on:setC}),
+h('div',{className:'card'},h('h3',null,depth+' depth, '+u.toLowerCase()+' undertone'),
+h('p',null,'Closest foundation shade: ',h('b',null,f[0]),'.'),
+h('p',null,'Dress colors that suit you: '+dress.join(', ')+'.')))}
+const FS=[['Oval','Balanced proportions. Most looks work, so keep contour light.'],['Round','Contour the sides of the forehead and jaw. Place blush slightly above the cheekbones.'],['Square','Soften the jaw corners with bronzer and blend blush in rounded motions.'],['Heart','Warm the temples, brighten the chin, and keep blush low on the cheeks.'],['Long','Sweep blush horizontally and bronze under the hairline and chin to shorten the face.']];
+const SE={Spring:['Warm and light',['#F4B393','#F2C14E','#9BCB6A','#F08A7E']],Summer:['Cool and light',['#B9A6D0','#E8A7B8','#8FB7D9','#C9C3CF']],Autumn:['Warm and deep',['#B5651D','#8A6D2B','#A5432E','#5E6B3A']],Winter:['Cool and deep',['#1F3C88','#B3123A','#6A2C70','#0E6B5C']]};
+function Guide(){const [u,setU]=useState('Warm'),[d,setD]=useState('Light');
+const se=u==='Warm'?(d==='Light'?'Spring':'Autumn'):(d==='Light'?'Summer':'Winter');
+return h('section',null,h('h2',null,'Face shape guide'),
+FS.map(f=>h('div',{key:f[0],className:'card'},h('h3',null,f[0]),h('p',{className:'mu',style:{margin:0}},f[1]))),
+h('h2',{style:{marginTop:24}},'Seasonal color analysis'),
+h('div',{className:'row'},
+h('label',null,'Undertone ',h('select',{value:u,onChange:e=>setU(e.target.value)},h('option',null,'Warm'),h('option',null,'Cool'))),
+h('label',null,'Depth ',h('select',{value:d,onChange:e=>setD(e.target.value)},h('option',null,'Light'),h('option',null,'Deep')))),
+h('div',{className:'seasons'},Object.entries(SE).map(([k,v])=>h('div',{key:k,className:'card'+(k===se?' hit':'')},h('h3',null,k+(k===se?' (your season)':'')),h('small',null,v[0]),h('div',{className:'pal'},v[1].map(x=>h('i',{key:x,style:{background:x}})))))))}
+function Me({fav,done}){const tot=T.reduce((a,t)=>a+t.s.length,0),dn=T.reduce((a,t)=>a+(done[t.id]||[]).length,0),p=Math.round(dn/tot*100);
+return h('section',null,h('h2',null,'My progress'),
+h('div',{className:'bar',role:'progressbar','aria-valuenow':p,'aria-valuemin':0,'aria-valuemax':100},h('i',{style:{width:p+'%'}})),
+h('p',{className:'mu'},dn+' of '+tot+' steps done ('+p+'%)'),
+h('h3',null,'Saved tutorials'),
+fav.length?T.filter(t=>fav.includes(t.id)).map(t=>h('div',{key:t.id,className:'card top'},h(Pv,{c:t.c,k:t.k}),h('div',null,h('h3',null,t.n),h('small',null,(done[t.id]||[]).length+' of '+t.s.length+' steps done')))):h('p',{className:'mu'},'Nothing saved yet. Tap Save on any tutorial to keep it here.'))}
+function Coach({t,close}){const [i,setI]=useState(0),[sec,setSec]=useState(0),[mic,setMic]=useState(false),[msg,setMsg]=useState(''),R=useRef(),ix=useRef(0);
+const go=n=>{const y=Math.max(0,Math.min(t.s.length-1,ix.current+n));ix.current=y;setI(y);say(t.s[y])};
+useEffect(()=>{say(t.s[0]);return()=>{try{speechSynthesis.cancel()}catch(e){}const r=R.current;R.current=null;r&&r.stop()}},[]);
+useEffect(()=>{if(sec<=0)return;const id=setTimeout(()=>{if(sec===1)say('Time is up');setSec(sec-1)},1000);return()=>clearTimeout(id)},[sec]);
+function listen(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){setMsg('Voice commands need Chrome or Edge.');return}
+if(mic){const r=R.current;R.current=null;r&&r.stop();setMic(false);return}
+const r=new SR();r.continuous=true;r.lang='en-IN';
+r.onresult=e=>{const x=e.results[e.results.length-1][0].transcript.toLowerCase();if(/next/.test(x))go(1);else if(/back|previous/.test(x))go(-1);else if(/repeat|again/.test(x))say(t.s[ix.current]);else if(/timer/.test(x))setSec(60)};
+r.onend=()=>{if(R.current===r){try{r.start()}catch(e){}}};
+r.onerror=e=>{if(e.error==='not-allowed'){R.current=null;setMic(false);setMsg('Microphone is blocked. Allow mic access to use voice commands.')}};
+R.current=r;try{r.start();setMic(true);setMsg('')}catch(e){setMsg('Could not start the microphone.')}}
+return h('div',{className:'card coach'},h('small',null,'Step '+(i+1)+' of '+t.s.length),h('p',{className:'big','aria-live':'polite'},t.s[i]),
+h('div',{className:'row'},h('button',{className:'ghost',disabled:i===0,onClick:()=>go(-1)},'Back'),h('button',{disabled:i===t.s.length-1,onClick:()=>go(1)},'Next'),h('button',{className:'ghost',onClick:()=>say(t.s[i])},'Repeat'),h('button',{className:'ghost',onClick:()=>setSec(60)},sec?sec+'s left':'60s timer'),h('button',{className:mic?'':'ghost',onClick:listen},mic?'Mic on':'Voice commands'),h('button',{className:'link',onClick:close},'Close')),
+msg&&h('p',{className:'err',role:'alert'},msg),mic&&h('small',null,'Say: next, back, repeat, or timer.'))}
+const ST={Dry:['Use a hydrating primer and a dewy cream foundation. Skip heavy powder.','Glowing skin prep'],Oily:['Use a mattifying primer and a matte foundation, then set the T-zone with powder.','Flawless base'],Combination:['Mattifying primer on the T-zone only, hydrating on the cheeks. Powder the T-zone.','Flawless base'],Normal:['Light primer and a skin-like foundation. Most finishes work for you.','Fresh college-ready']};
+function Type(){const [t,setT]=useState(()=>ls.get('v:st',''));const pick=x=>{setT(x);ls.set('v:st',x)};
+return h('section',null,h('h2',null,'Skin type quiz'),h('p',{className:'mu'},'By midday, how does your face feel?'),
+h('div',{className:'pills'},[['Tight or flaky','Dry'],['Shiny all over','Oily'],['Shiny only on nose and forehead','Combination'],['Comfortable','Normal']].map(o=>h('button',{key:o[1],className:t===o[1]?'on':'',onClick:()=>pick(o[1])},o[0]))),
+t&&h('div',{className:'card'},h('h3',null,t+' skin'),h('p',null,ST[t][0]),h('p',{className:'mu',style:{margin:0}},'Try next: '+ST[t][1])))}
+const KIT=['Foundation','Concealer','Powder','Highlighter','Blush','Eyeshadow palette','Eyeliner','Mascara','Lipstick','Lip liner'];
+const NEED={1:['Foundation','Concealer','Powder'],2:['Highlighter'],3:['Eyeshadow palette','Mascara'],4:['Eyeliner'],5:['Eyeshadow palette','Eyeliner'],6:['Lipstick','Lip liner'],7:['Lipstick','Lip liner'],8:['Foundation','Eyeshadow palette','Eyeliner','Blush','Highlighter','Lipstick'],9:['Concealer','Mascara','Blush'],10:['Foundation','Eyeshadow palette','Blush','Highlighter','Lipstick']};
+const LIFE={Foundation:12,Concealer:12,Powder:24,Highlighter:24,Blush:24,'Eyeshadow palette':24,Eyeliner:6,Mascara:3,Lipstick:24,'Lip liner':24};
+function left(p){if(!p.opened)return null;const d=new Date(p.opened);d.setMonth(d.getMonth()+LIFE[p.cat]);return Math.round((d-new Date())/864e5)}
+function SaveBox({c}){const [cat,setCat]=useState('Lipstick'),[nm,setNm]=useState(''),[ok,setOk]=useState('');
+function save(){const a=ls.get('v:own',[]);a.push({id:Date.now(),cat,name:nm||'My '+cat.toLowerCase(),hex:c,opened:''});ls.set('v:own',a);setOk('Saved to My kit.');setNm('')}
+return h('div',{className:'row'},h('select',{value:cat,onChange:e=>setCat(e.target.value),'aria-label':'Category'},KIT.map(x=>h('option',{key:x},x))),
+h('input',{type:'text',placeholder:'Name or brand (optional)',value:nm,style:{flex:1,minWidth:140,width:'auto'},onChange:e=>setNm(e.target.value),'aria-label':'Product name'}),
+h('button',{onClick:save},'Save this shade to my kit'),ok&&h('small',{role:'status'},ok))}
+function Kit(){const [k,setK]=useState(()=>ls.get('v:kit',[])),[own,setO]=useState(()=>ls.get('v:own',[]));
+useEffect(()=>{ls.set('v:kit',k)},[k]);useEffect(()=>{ls.set('v:own',own)},[own]);
+const have=[...new Set([...k,...own.map(p=>p.cat)])];
+const tg=x=>setK(a=>a.includes(x)?a.filter(y=>y!==x):[...a,x]);
+const upd=(id,o)=>setO(a=>a.map(p=>p.id===id?{...p,...o}:p));
+const rows=T.map(t=>[t,NEED[t.id].filter(x=>!have.includes(x))]).sort((a,b)=>a[1].length-b[1].length);
+const buy=KIT.filter(x=>!have.includes(x)).map(x=>[x,rows.filter(r=>r[1].length===1&&r[1][0]===x).length,rows.filter(r=>r[1].includes(x)).length]).sort((a,b)=>b[1]-a[1]||b[2]-a[2]);
+return h('section',null,h('h2',null,'My kit'),h('p',{className:'mu'},'Tap what you already own, or save exact shades from Color match.'),
+h('div',{className:'pills'},KIT.map(x=>h('button',{key:x,className:have.includes(x)?'on':'','aria-pressed':have.includes(x),onClick:()=>tg(x)},x))),
+own.length>0&&h('h3',null,'My products'),
+own.map(p=>{const dl=left(p),bad=dl!==null&&dl<=30;return h('div',{key:p.id,className:'card top'},h('span',{className:'chip',style:{background:p.hex}}),
+h('div',{className:'grow'},h('h3',null,p.name),h('small',null,p.cat),
+h('div',{className:'row',style:{margin:'6px 0 0'}},h('label',null,h('small',null,'Opened on '),h('input',{type:'date',value:p.opened,max:new Date().toISOString().slice(0,10),style:{width:'auto',padding:'4px 8px'},onChange:e=>upd(p.id,{opened:e.target.value}),'aria-label':'Date opened'}))),
+h('small',{className:bad?'err':''},dl===null?'Add the date you opened it to track expiry.':dl<0?'Expired '+(-dl)+' days ago. Time to replace it.':dl<=30?'Expiring soon, '+dl+' days left.':dl+' days left')),
+h('button',{className:'ghost sm',onClick:()=>setO(a=>a.filter(x=>x.id!==p.id))},'Remove'))}),
+buy.length>0&&h('h3',{style:{marginTop:20}},'Buy next'),
+buy.map(b=>h('div',{key:b[0],className:'card'},h('b',null,b[0]),h('small',null,b[1]?' unlocks '+b[1]+' look'+(b[1]>1?'s':'')+' right away, needed in '+b[2]:' needed in '+b[2]+' looks'))),
+h('h3',{style:{marginTop:20}},'Looks you can do'),
+rows.map(r=>h('div',{key:r[0].id,className:'card top'},h(Pv,{c:r[0].c,k:r[0].k}),h('div',null,h('h3',null,r[0].n),h('small',null,r[1].length?'Missing: '+r[1].join(', '):'You have everything')))))}
+function App(){const [tab,setTab]=useState('Tutorials'),[fav,setF]=useState(()=>ls.get('v:fav',[])),[done,setD]=useState(()=>ls.get('v:done',{})),[th,setTh]=useState(()=>ls.get('v:th','auto'));
+useEffect(()=>{ls.set('v:fav',fav)},[fav]);
+useEffect(()=>{ls.set('v:done',done)},[done]);
+useEffect(()=>{const r=document.documentElement;th==='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',th);ls.set('v:th',th)},[th]);
+const tf=id=>setF(f=>f.includes(id)?f.filter(x=>x!==id):[...f,id]);
+const td=(id,i)=>setD(d=>{const a=d[id]||[];return {...d,[id]:a.includes(i)?a.filter(x=>x!==i):[...a,i]}});
+const tabs=['Tutorials','Color match','Skin tone','Guides','Skin type','My kit','My progress'];
+return h(React.Fragment,null,
+h('header',null,h('h1',null,'Vanity'),h('select',{value:th,onChange:e=>setTh(e.target.value),'aria-label':'Theme'},h('option',{value:'auto'},'Auto theme'),h('option',{value:'light'},'Light'),h('option',{value:'dark'},'Dark'))),
+h('p',{className:'tag'},'Step-by-step makeup tutorials with a shade finder that reads color from your camera.'),
+h('nav',null,tabs.map(t=>h('button',{key:t,className:t===tab?'on':'',onClick:()=>setTab(t)},t))),
+tab==='Tutorials'?h(Tut,{fav,tf,done,td}):tab==='Color match'?h(Match):tab==='Skin tone'?h(Skin):tab==='Guides'?h(Guide):tab==='Skin type'?h(Type):tab==='My kit'?h(Kit):h(Me,{fav,done}))}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>
